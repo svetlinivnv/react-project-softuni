@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { browserLocalPersistence, getAuth, setPersistence } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDdpbFoibLm_4JVhWyStq2TGYEXu3dKrDo",
@@ -10,7 +11,9 @@ const firebaseConfig = {
     appId: "1:404548139465:web:3179db0297c8bcfa2b1018"
   };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+export { auth, db };
 setPersistence(auth, browserLocalPersistence);

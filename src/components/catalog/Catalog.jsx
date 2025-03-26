@@ -1,44 +1,35 @@
+import { useEffect, useState } from "react";
 import "./styles.css";
-
-const products = [
-  {
-    name: "Product 1",
-    price: 25.99,
-    description: "Description of product 1",
-    imageUrl: "https://via.placeholder.com/150",
-  },
-  {
-    name: "Product 2",
-    price: 35.99,
-    description: "Description of product 2",
-    imageUrl: "https://via.placeholder.com/150",
-  },
-  {
-    name: "Product 3",
-    price: 45.99,
-    description: "Description of product 3",
-    imageUrl: "https://via.placeholder.com/150",
-  },
-  // More products can be added here
-];
+import dataService from "../../services/dataService";
+import { truncateText } from "../../utils/textUtils";
+import { Link } from "react-router";
 
 export default function Catalog() {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    dataService.getAllDocuments("products").then((products) => {
+      setProducts(products);
+    });
+  }, []);
+
   return (
     <div className="catalog-container">
       <h2>Product Catalog</h2>
       <div className="product-list">
-        {products.map((product, index) => (
+        {products.map((product, productId) => (
           <div
             className="product"
-            key={index}
+            key={productId}
           >
             <img
               src={product.imageUrl}
               alt={product.name}
               className="product-image"
             />
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
+            <Link to={`/catalog/${product.productId}`}>
+              <h3>{product.name}</h3>
+            </Link>
+            <p>{truncateText(product.description, 100)}</p>
             <p>
               <strong>${product.price.toFixed(2)}</strong>
             </p>

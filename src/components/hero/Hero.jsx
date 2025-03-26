@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section className="hero">
       <h2>Welcome to Shopify</h2>
-      <p>Discover amazing products at unbeatable prices.</p>
+      <p>Check out our latest items below!</p>
       <Link
         to="/catalog"
         className="btn"

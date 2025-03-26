@@ -1,8 +1,25 @@
+import { useState } from "react";
 import "./styles.css";
+import authService from "../../services/authService";
+import { useNavigate } from "react-router";
 
 export default function Register() {
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const submitAction = (formData) => {
     const registerData = Object.fromEntries(formData);
+
+    if (registerData.password !== registerData.confirmPassword) {
+      alert("Passwords do not match");
+    }
+
+    try {
+      authService.registerUser(registerData.email, registerData.password);
+      setError(null);
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -27,6 +44,13 @@ export default function Register() {
         <input
           type="password"
           name="password"
+          required
+        />
+
+        <label>Confirm Password:</label>
+        <input
+          type="password"
+          name="confirmPassword"
           required
         />
 

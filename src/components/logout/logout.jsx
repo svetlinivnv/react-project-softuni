@@ -11,7 +11,7 @@ export default function Logout() {
         await authService.logoutUser();
         setHasLoggedOut(true);
       } catch (err) {
-        console.log("Logout failed: ", err.message);
+        alert("Logout failed: ", err.message);
       }
     };
     handleLogout();

@@ -1,35 +1,35 @@
+import { useEffect, useState } from "react";
+import dataService from "../../services/dataService";
+import { Link } from "react-router";
+
 export default function FeaturedProducts() {
+  const featuredProductsLimit = 5;
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    dataService.getAllDocuments("products").then((products) => {
+      setProducts(products);
+    });
+  }, []);
   return (
     <section className="products">
-      <h2>Featured Products</h2>
+      <h2>Latest Products</h2>
       <div className="product-list">
-        <div className="product">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="Product 1"
-          />
-          <h3>Product 1</h3>
-          <p>$19.99</p>
-          <button>Add to Cart</button>
-        </div>
-        <div className="product">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="Product 2"
-          />
-          <h3>Product 2</h3>
-          <p>$24.99</p>
-          <button>Add to Cart</button>
-        </div>
-        <div className="product">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="Product 3"
-          />
-          <h3>Product 3</h3>
-          <p>$29.99</p>
-          <button>Add to Cart</button>
-        </div>
+        {products.slice(0, featuredProductsLimit).map((product, productId) => (
+          <div
+            className="product"
+            key={productId}
+          >
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+            />
+            <Link to={`/catalog/${product.productId}`}>
+              <h3>{product.name}</h3>
+            </Link>
+            <p>${product.price}</p>
+            <button>Add to Cart</button>
+          </div>
+        ))}
       </div>
     </section>
   );

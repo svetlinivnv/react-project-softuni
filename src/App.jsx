@@ -10,6 +10,11 @@ import Catalog from "./components/catalog/Catalog";
 import UserProfile from "./components/user-profile/UserProfile";
 import Logout from "./components/logout/logout";
 import { AuthProvider } from "./contexts/AuthContext";
+import ProductDetails from "./components/product-details/ProductDetails";
+import ProductEdit from "./components/product-edit/ProductEdit";
+import AuthGuard from "./components/guards/AuthGuard";
+import GuestGuard from "./components/guards/GuestGuard";
+import NotFound from "./components/not-found/NotFound";
 
 function App() {
   return (
@@ -26,25 +31,45 @@ function App() {
               path="/catalog"
               element={<Catalog />}
             />
+            <Route element={<GuestGuard />}>
+              <Route
+                path="/create"
+                element={<ProductCreate />}
+              />
+              <Route
+                path="/catalog/:productId/edit"
+                element={<ProductEdit />}
+              />
+              <Route
+                path="/profile"
+                element={<UserProfile />}
+              />
+              <Route
+                path="/logout"
+                element={<Logout />}
+              />
+            </Route>
             <Route
-              path="/create"
-              element={<ProductCreate />}
+              path="/catalog/:productId"
+              element={<ProductDetails />}
+            />
+            <Route element={<AuthGuard />}>
+              <Route
+                path="/login"
+                element={<Login />}
+              />
+              <Route
+                path="/register"
+                element={<Register />}
+              />
+            </Route>
+            <Route
+              path="/404"
+              element={<NotFound />}
             />
             <Route
-              path="/profile"
-              element={<UserProfile />}
-            />
-            <Route
-              path="/login"
-              element={<Login />}
-            />
-            <Route
-              path="/register"
-              element={<Register />}
-            />
-            <Route
-              path="/logout"
-              element={<Logout />}
+              path="*"
+              element={<NotFound />}
             />
           </Routes>
         </div>
