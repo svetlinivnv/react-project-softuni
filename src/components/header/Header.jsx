@@ -1,12 +1,24 @@
 import { Link } from "react-router";
 import { useAuth } from "../../contexts/AuthContext";
+import Loader from "../loader/Loader";
 
 export default function Header() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <header className="header">
-      <h1 className="logo">Shopify</h1>
+      <Link
+        className="logo"
+        to="/"
+      >
+        <h1 className="logo">
+          <span className="logo-semicolor">SHOP</span>IFY
+        </h1>
+      </Link>
       <nav>
         <ul className="nav-links">
           <li>
@@ -25,6 +37,7 @@ export default function Header() {
               </li>
               <li>
                 <Link to="/logout">Logout</Link>
+                {` (${user.displayName})`}
               </li>
               <li>
                 <Link

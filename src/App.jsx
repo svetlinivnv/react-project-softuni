@@ -1,5 +1,11 @@
 import "./App.css";
 import { Route, Routes } from "react-router";
+import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
+
+import GuestGuard from "./components/guards/GuestGuard";
+import AuthGuard from "./components/guards/AuthGuard";
+
 import Login from "./components/login/Login";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -9,18 +15,16 @@ import ProductCreate from "./components/product-create/ProductCreate";
 import Catalog from "./components/catalog/Catalog";
 import UserProfile from "./components/user-profile/UserProfile";
 import Logout from "./components/logout/logout";
-import { AuthProvider } from "./contexts/AuthContext";
 import ProductDetails from "./components/product-details/ProductDetails";
 import ProductEdit from "./components/product-edit/ProductEdit";
-import AuthGuard from "./components/guards/AuthGuard";
-import GuestGuard from "./components/guards/GuestGuard";
 import NotFound from "./components/not-found/NotFound";
+import ShoppingCart from "./components/shopping-cart/ShoppingCart";
 
 function App() {
   return (
     <AuthProvider>
-      <>
-        <div className="main-content">
+      <div className="main-content">
+        <CartProvider>
           <Header />
           <Routes>
             <Route
@@ -45,6 +49,10 @@ function App() {
                 element={<UserProfile />}
               />
               <Route
+                path="/cart"
+                element={<ShoppingCart />}
+              />
+              <Route
                 path="/logout"
                 element={<Logout />}
               />
@@ -53,6 +61,7 @@ function App() {
               path="/catalog/:productId"
               element={<ProductDetails />}
             />
+
             <Route element={<AuthGuard />}>
               <Route
                 path="/login"
@@ -72,9 +81,9 @@ function App() {
               element={<NotFound />}
             />
           </Routes>
-        </div>
-        <Footer />
-      </>
+        </CartProvider>
+      </div>
+      <Footer />
     </AuthProvider>
   );
 }

@@ -1,12 +1,23 @@
 import { db } from "../firebaseConfig";
-import { collection, addDoc, getDocs, getDoc, updateDoc, deleteDoc, doc, query, orderBy, setDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, updateDoc, deleteDoc, doc, query, orderBy, setDoc } from "firebase/firestore";
 
 const dataService = {
-  async createDocument(collectionName, productData) {
+  // async createDocument(collectionName, productData) {
+  //   try {
+  //     const docRef = doc(db, collectionName, productData.productId);
+  //     await setDoc(docRef, productData);
+  //     return productData.productId;
+  //   } catch (error) {
+  //     alert("Error adding document:", error);
+  //     throw error;
+  //   }
+  // },
+
+  async createDocument(collectionName, docId, data) {
     try {
-      const docRef = doc(db, collectionName, productData.productId);
-      await setDoc(docRef, productData);
-      return productData.productId;
+      const docRef = doc(db, collectionName, docId);  
+      await setDoc(docRef, data);
+      return docId;
     } catch (error) {
       alert("Error adding document:", error);
       throw error;

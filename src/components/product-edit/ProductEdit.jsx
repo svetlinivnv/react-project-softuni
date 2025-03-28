@@ -1,16 +1,20 @@
+import "./styles.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-import dataService from "../../services/dataService";
+
 import { useAuth } from "../../contexts/AuthContext";
-import "./styles.css";
+import dataService from "../../services/dataService";
+import Loader from "../loader/Loader";
 
 export default function ProductEdit() {
-  const { productId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const userId = user?.user?.uid;
+  const { productId } = useParams();
+  const userId = user?.uid;
 
   const [product, setProduct] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [previewUrl, setPreviewUrl] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -20,6 +24,11 @@ export default function ProductEdit() {
           productId
         );
         setProduct(productData);
+        setImageUrl(productData.imageUrl);
+        setPreviewUrl(productData.imageUrl);
+        if (userId !== productData.createdBy) {
+          navigate(`/catalog/${productId}`);
+        }
       } catch (err) {
         alert("Error fetching product:", err);
       }
@@ -28,7 +37,7 @@ export default function ProductEdit() {
   }, [productId]);
 
   if (!product) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   const submitAction = (formData) => {
@@ -41,6 +50,10 @@ export default function ProductEdit() {
     } catch (err) {
       alert("Error updating product: ", err);
     }
+  };
+
+  const handleUrlBlur = () => {
+    setPreviewUrl(imageUrl);
   };
 
   return (
@@ -83,10 +96,29 @@ export default function ProductEdit() {
           <input
             type="url"
             name="imageUrl"
-            defaultValue={product.imageUrl}
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            onBlur={handleUrlBlur}
             required
           />
         </div>
+
+        {previewUrl && (
+          <div className="image-preview">
+            <img
+              src={previewUrl}
+              alt="Preview"
+              onError={() => setPreviewUrl("")}
+              style={{
+                maxWidth: "300px",
+                maxHeight: "300px",
+                border: "1px solid #ccc",
+                borderRadius: "10px",
+                marginTop: "10px",
+              }}
+            />
+          </div>
+        )}
 
         <button type="submit">Save Changes</button>
       </form>

@@ -1,16 +1,25 @@
+import "./styles.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import dataService from "../../services/dataService";
-import "./styles.css";
+
 import { useAuth } from "../../contexts/AuthContext";
+import { useCart } from "../../contexts/CartContext";
+import dataService from "../../services/dataService";
+import Loader from "../loader/Loader";
 
 export default function ProductDetails() {
+  const navigate = useNavigate();
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true); // Track loading state
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const user = useAuth();
   const userId = user?.user?.uid;
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    navigate("/cart");
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -37,7 +46,7 @@ export default function ProductDetails() {
     fetchProduct();
   }, [productId, navigate]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader />;
 
   return (
     <div className="product-details">
@@ -47,6 +56,12 @@ export default function ProductDetails() {
           alt={product.name}
           style={{ maxWidth: "300px", maxHeight: "300px" }}
         />
+        <button
+          className="add-to-cart-btn"
+          onClick={() => handleAddToCart(product)}
+        >
+          Add to Cart
+        </button>
       </div>
       <div className="product-info">
         <h1>{product.name}</h1>

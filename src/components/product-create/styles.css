@@ -4,24 +4,44 @@
     padding: 20px;
     border: 1px solid #ddd;
     text-align: center;
-  }
-  
-  input, textarea {
+    background: white;
+    border-radius: 8px;
+}
+
+input, textarea {
     width: 100%;
     padding: 8px;
     margin: 5px 0;
     border: 1px solid #ccc;
-  }
-  
-  button {
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
     width: 100%;
     padding: 10px;
     background: #007bff;
     color: white;
     border: none;
     cursor: pointer;
-  }
-  
-  button:hover {
+    border-radius: 4px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
     background: #0056b3;
-  }
+}
+
+button:focus {
+    outline: none;
+}
+
+.image-preview img {
+    display: block;
+    margin: 10px auto;
+    max-width: 300px;
+    max-height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
