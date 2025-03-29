@@ -64,6 +64,21 @@
     transition: background-color 0.3s;
     margin-top: 20px;
   }
+
+  .checkout-btn-back {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    cursor: default !important;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+  } 
+  
+  .checkout-btn-back :hover {
+    background-color: #0056b3;
+  }
   
   .delete {
     position: absolute;

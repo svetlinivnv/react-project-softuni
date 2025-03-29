@@ -57,7 +57,7 @@ export default function ShoppingCart() {
         <>
           <p className="cart-empty">Your shopping cart is empty!</p>
           <Link to="/catalog">
-            <button className="checkout-btn">Back to Catalog</button>
+            <button className="checkout-btn-back">Back to Catalog</button>
           </Link>
         </>
       )}
