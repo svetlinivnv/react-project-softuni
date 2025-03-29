@@ -64,7 +64,6 @@ body {
     color: #007bff;
   }
   
-  /* Burger menu styling */
   .menu-toggle {
     display: none;
     flex-direction: column;

@@ -79,9 +79,8 @@ button:hover {
   background-color: #f7f7f7;
 }
 
-@media screen and (max-width: 600px) {
+@media (max-width: 768px) {
   .edit-profile-container {
-    width: 90%;
-    padding: 15px;
+    max-width: 80%;
   }
 }
