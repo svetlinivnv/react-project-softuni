@@ -83,7 +83,6 @@ nav {
   border: 1px solid #ddd;
   padding: 10px;
   width: 150px;
-  /* align-items: center; */
 }
 .footer {
   text-align: center;
@@ -92,10 +91,6 @@ nav {
   color: white;
   width: 100%;
   bottom: 0;
-}
-
-button {
-  margin: auto !important;
 }
 
 /* modal styles */
@@ -121,15 +116,16 @@ button {
 }
 
 .delete-btn {
+  width: 45%;
   background-color: red;
   color: white;
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-  margin-right: 10px;
 }
 
 .cancel-btn {
+  width: 45%;
   background-color: gray;
   color: white;
   padding: 10px 20px;

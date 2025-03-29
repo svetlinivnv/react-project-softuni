@@ -85,8 +85,10 @@ export default function ProductDetails() {
         </p>
         <p>{product.description}</p>
         <p>
-          <strong>Created on:</strong>{" "}
+          <strong>Added on:</strong>{" "}
           {new Date(product.createdAt.seconds * 1000).toLocaleString()}
+          <strong> by</strong>
+          {userId === product.createdBy ? " you" : ` ${product.ownerName}`}
         </p>
 
         {userId === product.createdBy && (

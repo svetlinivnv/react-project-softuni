@@ -30,8 +30,6 @@ export default function Catalog() {
   };
 
   const handleDelete = async (productId) => {
-    console.log(productId);
-
     try {
       await dataService.deleteDocument("products", productId);
       setProducts((prevProducts) =>

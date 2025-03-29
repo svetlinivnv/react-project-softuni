@@ -19,7 +19,8 @@
   background: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  min-height: 350px;
 }
 
 .product-image {
@@ -35,6 +36,7 @@
 .product p {
   font-size: 14px;
   margin: 5px 0;
+  flex-grow: 1;
 }
 
 .add-to-cart {
@@ -43,6 +45,12 @@
   color: white;
   border: none;
   cursor: pointer;
+  display: block;
+  margin-top: auto;
+}
+
+.add-to-cart.hidden {
+  display: none;
 }
 
 .add-to-cart:hover {
