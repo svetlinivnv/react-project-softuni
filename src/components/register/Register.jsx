@@ -81,7 +81,6 @@ export default function Register() {
       [name]: value,
     });
 
-    // Clear error as user is typing
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: "",

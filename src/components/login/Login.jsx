@@ -59,7 +59,6 @@ export default function Login() {
       [name]: value,
     });
 
-    // Clear error as user is typing
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: "",
