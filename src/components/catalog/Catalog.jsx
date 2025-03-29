@@ -13,6 +13,7 @@ export default function Catalog() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState(null);
+  const [productToDelete, setProductToDelete] = useState(null);
   const { addToCart } = useCart();
   const { user } = useAuth();
   const [userId, setUserId] = useState(null);
@@ -29,12 +30,15 @@ export default function Catalog() {
   };
 
   const handleDelete = async (productId) => {
+    console.log(productId);
+
     try {
       await dataService.deleteDocument("products", productId);
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.productId !== productId)
       );
       setIsModalOpen(false);
+      setProductToDelete(null);
     } catch (err) {
       alert("Error deleting product: ", err);
     }
@@ -72,12 +76,15 @@ export default function Catalog() {
                   ></i>
                   <i
                     className="fa-solid fa-trash delete-icon"
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      setProductToDelete(product.productId);
+                    }}
                   ></i>
                   <DeleteConfirmation
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
-                    onConfirm={() => handleDelete(product.productId)}
+                    onConfirm={() => handleDelete(productToDelete)}
                   />
                 </div>
               )}
