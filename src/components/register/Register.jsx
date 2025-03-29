@@ -114,8 +114,6 @@ export default function Register() {
         <button type="submit">Register</button>
         {globalError && <p className="error">{globalError}</p>}
       </form>
-
-      {/* Link to login page */}
       <div className="login-link">
         <p>
           Already have an account? <Link to="/login">Login here</Link>

@@ -17,7 +17,7 @@ h2 {
 }
 
 .input-group {
-  margin-bottom: 15px; /* Adds space between input fields */
+  margin-bottom: 15px;
 }
 
 input {
@@ -25,12 +25,12 @@ input {
   padding: 8px;
   margin: 5px 0;
   border: 1px solid #ccc;
-  border-radius: 5px; /* Rounded corners for inputs */
+  border-radius: 5px;
   font-size: 14px;
 }
 
 input:focus {
-  border-color: #007bff; /* Change border color on focus */
+  border-color: #007bff;
   outline: none;
 }
 
@@ -42,7 +42,7 @@ button {
   border: none;
   cursor: pointer;
   font-size: 16px;
-  border-radius: 5px; /* Rounded corners for the button */
+  border-radius: 5px;
 }
 
 button:hover {
