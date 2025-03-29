@@ -83,6 +83,7 @@ nav {
   border: 1px solid #ddd;
   padding: 10px;
   width: 150px;
+  /* align-items: center; */
 }
 .footer {
   text-align: center;
@@ -93,6 +94,9 @@ nav {
   bottom: 0;
 }
 
+button {
+  margin: auto !important;
+}
 
 /* modal styles */
 .modal-overlay {
