@@ -6,9 +6,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useCart } from "../../contexts/CartContext";
 import dataService from "../../services/dataService";
 import Loader from "../loader/Loader";
+import DeleteConfirmation from "../delete-confirmation/DeleteConfirmation";
 
 export default function ProductDetails() {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -46,6 +48,16 @@ export default function ProductDetails() {
     fetchProduct();
   }, [productId, navigate]);
 
+  const handleDelete = async () => {
+    try {
+      await dataService.deleteDocument("products", productId);
+      setIsModalOpen(false);
+      navigate("/catalog");
+    } catch (err) {
+      alert("Error deleting product: ", err);
+    }
+  };
+
   if (loading) return <Loader />;
 
   return (
@@ -56,19 +68,22 @@ export default function ProductDetails() {
           alt={product.name}
           style={{ maxWidth: "300px", maxHeight: "300px" }}
         />
-        <button
-          className="add-to-cart-btn"
-          onClick={() => handleAddToCart(product)}
-        >
-          Add to Cart
-        </button>
+        {userId !== product.createdBy && (
+          <button
+            className="add-to-cart-btn"
+            onClick={() => handleAddToCart(product)}
+          >
+            Add to Cart
+          </button>
+        )}
       </div>
       <div className="product-info">
         <h1>{product.name}</h1>
-        <p>{product.description}</p>
         <p>
-          <strong>Price:</strong> ${product.price.toFixed(2)}
+          <strong style={{ color: "#007bff" }}>Price:</strong> $
+          {product.price.toFixed(2)}
         </p>
+        <p>{product.description}</p>
         <p>
           <strong>Created on:</strong>{" "}
           {new Date(product.createdAt.seconds * 1000).toLocaleString()}
@@ -79,24 +94,12 @@ export default function ProductDetails() {
             <button onClick={() => navigate(`/catalog/${productId}/edit`)}>
               Edit
             </button>
-            <button
-              onClick={async () => {
-                if (
-                  window.confirm(
-                    "Are you sure you want to delete this product?"
-                  )
-                ) {
-                  try {
-                    await dataService.deleteDocument("products", productId);
-                    navigate("/catalog");
-                  } catch (err) {
-                    alert("Error deleting product:", err);
-                  }
-                }
-              }}
-            >
-              Delete
-            </button>
+            <button onClick={() => setIsModalOpen(true)}>Delete</button>
+            <DeleteConfirmation
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onConfirm={handleDelete}
+            />
           </div>
         )}
       </div>

@@ -7,9 +7,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import { truncateText } from "../../utils/textUtils";
 import dataService from "../../services/dataService";
 import Loader from "../loader/Loader";
+import DeleteConfirmation from "../delete-confirmation/DeleteConfirmation";
 
 export default function Catalog() {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState(null);
   const { addToCart } = useCart();
   const { user } = useAuth();
@@ -27,15 +29,14 @@ export default function Catalog() {
   };
 
   const handleDelete = async (productId) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      try {
-        await dataService.deleteDocument("products", productId);
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product.productId !== productId)
-        );
-      } catch (err) {
-        alert("Error deleting product: ", err);
-      }
+    try {
+      await dataService.deleteDocument("products", productId);
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.productId !== productId)
+      );
+      setIsModalOpen(false);
+    } catch (err) {
+      alert("Error deleting product: ", err);
     }
   };
 
@@ -71,8 +72,13 @@ export default function Catalog() {
                   ></i>
                   <i
                     className="fa-solid fa-trash delete-icon"
-                    onClick={() => handleDelete(product.productId)}
+                    onClick={() => setIsModalOpen(true)}
                   ></i>
+                  <DeleteConfirmation
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onConfirm={() => handleDelete(product.productId)}
+                  />
                 </div>
               )}
               <img
@@ -87,12 +93,14 @@ export default function Catalog() {
               <p>
                 <strong>${product.price.toFixed(2)}</strong>
               </p>
-              <button
-                onClick={() => handleAddToCart(product)}
-                className="add-to-cart"
-              >
-                Add to Cart
-              </button>
+              {userId !== product.createdBy && (
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="add-to-cart"
+                >
+                  Add to Cart
+                </button>
+              )}
             </div>
           ))
         )}
