@@ -93,6 +93,10 @@ nav {
   bottom: 0;
 }
 
+form button {
+  margin: auto;
+}
+
 /* modal styles */
 .modal-overlay {
   position: fixed;
