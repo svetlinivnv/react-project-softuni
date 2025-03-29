@@ -4,6 +4,7 @@ import dataService from "../../services/dataService";
 import "./styles.css";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import generateId from "../../utils/generateId";
 
 export default function AddProduct() {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ export default function AddProduct() {
 
     if (!validateForm(formData)) return;
 
-    const productId = "id_" + Math.random().toString(36).substr(2, 9);
+    const productId = generateId();
 
     const productData = {
       ...formData,

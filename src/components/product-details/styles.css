@@ -24,6 +24,10 @@
   object-fit: cover;
 }
 
+.product-image .buttons {
+  width: 80%;
+}
+
 .product-info {
   flex: 1;
   display: flex;

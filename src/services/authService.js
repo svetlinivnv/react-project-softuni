@@ -14,7 +14,7 @@ const registerUser = async (email, password, username) => {
   const user = userCredential.user;
 
   await updateProfile(user, { 
-    displayName: username
+    displayName: username,
   });
 
   return userCredential;
@@ -32,13 +32,20 @@ const authStateListener = (callback) => {
   return onAuthStateChanged(auth, callback);
 };
 
-const updateUserProfile = async (user, { username, newPassword }) => {
+const updateUserProfile = async (user, { username, newPassword, photoURL }) => {
   if (username && username !== user.displayName) {
     await updateProfile(user, { displayName: username });
   }
 
+  if (photoURL === "") {
+    await updateProfile(user, { photoURL: null });
+  } else if (photoURL && photoURL !== user.photoURL) {
+    await updateProfile(user, { photoURL });
+  }
+
   if (newPassword) {
     await updatePassword(user, newPassword);
+    logoutUser();
   }
 
   await reload(user);

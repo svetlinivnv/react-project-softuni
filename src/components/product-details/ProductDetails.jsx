@@ -7,6 +7,7 @@ import { useCart } from "../../contexts/CartContext";
 import dataService from "../../services/dataService";
 import Loader from "../loader/Loader";
 import DeleteConfirmation from "../delete-confirmation/DeleteConfirmation";
+import { formatDate } from "../../utils/formatDate";
 
 export default function ProductDetails() {
   const navigate = useNavigate();
@@ -76,21 +77,12 @@ export default function ProductDetails() {
             Add to Cart
           </button>
         )}
-      </div>
-      <div className="product-info">
-        <h1>{product.name}</h1>
-        <p>
-          <strong style={{ color: "#007bff" }}>Price:</strong> $
-          {product.price.toFixed(2)}
-        </p>
-        <p>{product.description}</p>
         <p>
           <strong>Added on:</strong>{" "}
-          {new Date(product.createdAt.seconds * 1000).toLocaleString()}
+          {formatDate(product.createdAt, "DD/MM/YYYY HH:mm")}
           <strong> by</strong>
           {userId === product.createdBy ? " you" : ` ${product.ownerName}`}
         </p>
-
         {userId === product.createdBy && (
           <div className="buttons">
             <button onClick={() => navigate(`/catalog/${productId}/edit`)}>
@@ -104,6 +96,14 @@ export default function ProductDetails() {
             />
           </div>
         )}
+      </div>
+      <div className="product-info">
+        <h1>{product.name}</h1>
+        <p>
+          <strong style={{ color: "#007bff" }}>Price:</strong> $
+          {product.price.toFixed(2)}
+        </p>
+        <p>{product.description}</p>
       </div>
     </div>
   );

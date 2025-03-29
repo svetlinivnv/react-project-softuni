@@ -10,6 +10,7 @@ export default function UserProfile() {
     email: user?.email || "",
     newPassword: "",
     confirmPassword: "",
+    photoURL: user?.photoURL || "",
   });
 
   const [error, setError] = useState(null);
@@ -18,6 +19,7 @@ export default function UserProfile() {
     username: "",
     newPassword: "",
     confirmPassword: "",
+    photoURL: "",
   });
 
   const handleChange = (e) => {
@@ -41,6 +43,15 @@ export default function UserProfile() {
 
     if (name === "confirmPassword" && value !== formData.newPassword) {
       error = "Passwords do not match.";
+    }
+
+    if (
+      name === "photoURL" &&
+      value &&
+      !/^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg|tiff|ico)$/i.test(value)
+    ) {
+      error =
+        "Please enter a valid image URL (jpg, jpeg, png, gif, bmp, webp, svg, tiff, ico).";
     }
 
     setFormErrors((prevErrors) => ({
@@ -76,6 +87,17 @@ export default function UserProfile() {
       errors.confirmPassword = "Passwords do not match.";
     }
 
+    if (
+      formData.photoURL &&
+      !/^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg|tiff|ico)$/i.test(
+        formData.photoURL
+      )
+    ) {
+      isValid = false;
+      errors.photoURL =
+        "Please enter a valid image URL (jpg, jpeg, png, gif, bmp, webp, svg, tiff, ico).";
+    }
+
     setFormErrors(errors);
     return isValid;
   };
@@ -100,6 +122,14 @@ export default function UserProfile() {
   return (
     <div className="edit-profile-container">
       <h2>Edit Profile</h2>
+      <div className="user-image-container">
+        <img
+          src={formData.photoURL || "/images/default-user-image.png"}
+          alt="User Profile"
+          className="user-image"
+        />
+      </div>
+
       <form onSubmit={submitAction}>
         <label>Username</label>
         <input
@@ -123,6 +153,19 @@ export default function UserProfile() {
           readOnly
           className="readonly"
         />
+
+        <label>Profile Picture URL</label>
+        <input
+          type="text"
+          name="photoURL"
+          value={formData.photoURL}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={formErrors.photoURL ? "invalid" : ""}
+        />
+        {formErrors.photoURL && (
+          <div className="error-text">{formErrors.photoURL}</div>
+        )}
 
         <label>New Password</label>
         <input

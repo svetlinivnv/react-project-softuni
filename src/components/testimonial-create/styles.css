@@ -1,0 +1,40 @@
+.leave-testimonial {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 32px auto;
+    max-width: 80%;
+  }
+  
+  .leave-testimonial h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  
+  .leave-testimonial textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: none;
+    margin-bottom: 12px;
+  }
+  
+  .leave-testimonial button {
+    background-color: #1d4ed8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .leave-testimonial button:hover {
+    background-color: #2563eb;
+  }
+  
+  .leave-testimonial .message {
+    margin-top: 12px;
+    color: green;
+  }

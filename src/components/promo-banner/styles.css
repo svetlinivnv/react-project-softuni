@@ -1,0 +1,23 @@
+.promo-banner {
+    background-color: #007bff;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    border-radius: 16px;
+    margin: 32px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .promo-banner h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #e0e7ff;
+}
+  
+  .promo-banner p {
+    font-size: 16px;
+  }

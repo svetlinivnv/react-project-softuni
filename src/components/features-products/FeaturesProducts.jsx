@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export default function FeaturedProducts() {
   const navigate = useNavigate();
-  const featuredProductsLimit = 5;
+  const featuredProductsLimit = 4;
   const [products, setProducts] = useState([]);
   const { addToCart } = useCart();
   const [loading, setLoading] = useState(true);
