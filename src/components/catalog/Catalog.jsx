@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 
 import { useCart } from "../../contexts/CartContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { truncateText } from "../../utils/textUtils";
 import dataService from "../../services/dataService";
 import Loader from "../loader/Loader";
@@ -11,10 +12,31 @@ export default function Catalog() {
   const navigate = useNavigate();
   const [products, setProducts] = useState(null);
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setUserId(user.uid);
+    }
+  }, [user]);
 
   const handleAddToCart = (product) => {
     addToCart(product);
     navigate("/cart");
+  };
+
+  const handleDelete = async (productId) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await dataService.deleteDocument("products", productId);
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product.productId !== productId)
+        );
+      } catch (err) {
+        alert("Error deleting product: ", err);
+      }
+    }
   };
 
   useEffect(() => {
@@ -39,6 +61,20 @@ export default function Catalog() {
               className="product"
               key={product.productId}
             >
+              {userId === product.createdBy && (
+                <div className="product-actions">
+                  <i
+                    className="fa-solid fa-pen-to-square edit-icon"
+                    onClick={() =>
+                      navigate(`/catalog/${product.productId}/edit`)
+                    }
+                  ></i>
+                  <i
+                    className="fa-solid fa-trash delete-icon"
+                    onClick={() => handleDelete(product.productId)}
+                  ></i>
+                </div>
+              )}
               <img
                 src={product.imageUrl}
                 alt={product.name}

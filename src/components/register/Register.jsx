@@ -1,7 +1,9 @@
-import { useState } from "react";
 import "./styles.css";
+
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+
 import authService from "../../services/authService";
-import { useNavigate } from "react-router";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -36,7 +38,6 @@ export default function Register() {
   const submitAction = async (event) => {
     event.preventDefault();
     const registerData = { ...formData };
-    console.log(registerData);
 
     if (!validateForm(registerData)) return;
 
@@ -113,6 +114,13 @@ export default function Register() {
         <button type="submit">Register</button>
         {globalError && <p className="error">{globalError}</p>}
       </form>
+
+      {/* Link to login page */}
+      <div className="login-link">
+        <p>
+          Already have an account? <Link to="/login">Login here</Link>
+        </p>
+      </div>
     </div>
   );
 }

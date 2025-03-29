@@ -1,8 +1,39 @@
+import "./styles.css";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function Header() {
   const { user, loading } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef(null);
+  const menuBtnRef = useRef(null);
+
+  const toggleMenu = () => {
+    setMenuOpen((prev) => !prev);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        navRef.current &&
+        !navRef.current.contains(event.target) &&
+        !menuBtnRef.current.contains(event.target)
+      ) {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   if (loading) {
     return null;
@@ -18,8 +49,23 @@ export default function Header() {
           <span className="logo-semicolor">SHOP</span>IFY
         </h1>
       </Link>
-      <nav>
-        <ul className="nav-links">
+      <div
+        ref={menuBtnRef}
+        className="menu-toggle"
+        onClick={toggleMenu}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <nav
+        ref={navRef}
+        className={menuOpen ? "active" : ""}
+      >
+        <ul
+          className="nav-links"
+          onClick={closeMenu}
+        >
           <li>
             <Link to="/">Home</Link>
           </li>

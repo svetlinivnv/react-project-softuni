@@ -69,6 +69,11 @@ export default function Login() {
         <button type="submit">Login</button>
         {globalError && <p className="error">{globalError}</p>}
       </form>
+      <div className="register-link">
+        <p>
+          Don't have an account? <a href="/register">Register here</a>
+        </p>
+      </div>
     </div>
   );
 }

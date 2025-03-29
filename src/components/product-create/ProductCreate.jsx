@@ -11,18 +11,64 @@ export default function AddProduct() {
   const userId = user.user.uid;
   const username = user.user.displayName;
 
-  const [imageUrl, setImageUrl] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    imageUrl: "",
+  });
+
+  const [errors, setErrors] = useState({});
   const [previewUrl, setPreviewUrl] = useState("");
 
-  const submitAction = (formData) => {
-    let productData = Object.fromEntries(formData);
+  const validateForm = (data) => {
+    const newErrors = {};
+
+    if (!data.name || data.name.trim().length < 3) {
+      newErrors.name = "Product name must be at least 3 characters long.";
+    }
+
+    if (!data.description || data.description.trim().length < 10) {
+      newErrors.description =
+        "Description must be at least 10 characters long.";
+    }
+
+    if (!data.price || isNaN(data.price) || Number(data.price) <= 0) {
+      newErrors.price = "Price must be a positive number.";
+    }
+
+    if (!data.imageUrl || !isValidUrl(data.imageUrl)) {
+      newErrors.imageUrl = "Image URL must be a valid URL.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const submitAction = (event) => {
+    event.preventDefault();
+
+    if (!validateForm(formData)) return;
+
     const productId = "id_" + Math.random().toString(36).substr(2, 9);
 
-    productData.price = Number(productData.price);
-    productData.productId = productId;
-    productData.createdBy = userId;
-    productData.ownerName = username;
-    productData.createdAt = Timestamp.now();
+    const productData = {
+      ...formData,
+      price: Number(formData.price),
+      productId,
+      createdBy: userId,
+      ownerName: username,
+      createdAt: Timestamp.now(),
+    };
 
     try {
       dataService.createDocument("products", productId, productData);
@@ -32,45 +78,69 @@ export default function AddProduct() {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    if (name === "imageUrl") setPreviewUrl(value);
+  };
+
   const handleUrlBlur = () => {
-    setPreviewUrl(imageUrl);
+    if (!isValidUrl(formData.imageUrl)) setPreviewUrl("");
   };
 
   return (
     <div className="add-product-container">
       <h2>Add Product</h2>
-      <form action={submitAction}>
-        <label>Product Name:</label>
-        <input
-          type="text"
-          name="name"
-          required
-        />
+      <form onSubmit={submitAction}>
+        <div>
+          <label>Product Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+          {errors.name && <p className="error">{errors.name}</p>}
+        </div>
 
-        <label>Description:</label>
-        <textarea
-          name="description"
-          rows="4"
-          required
-        ></textarea>
+        <div>
+          <label>Description:</label>
+          <textarea
+            name="description"
+            rows="4"
+            value={formData.description}
+            onChange={handleChange}
+          ></textarea>
+          {errors.description && <p className="error">{errors.description}</p>}
+        </div>
 
-        <label>Price:</label>
-        <input
-          type="number"
-          name="price"
-          required
-          step="0.01"
-        />
+        <div>
+          <label>Price:</label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            step="0.01"
+          />
+          {errors.price && <p className="error">{errors.price}</p>}
+        </div>
 
-        <label>Image URL:</label>
-        <input
-          type="url"
-          name="imageUrl"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-          onBlur={handleUrlBlur}
-          required
-        />
+        <div>
+          <label>Image URL:</label>
+          <input
+            type="url"
+            name="imageUrl"
+            value={formData.imageUrl}
+            onChange={handleChange}
+            onBlur={handleUrlBlur}
+          />
+          {errors.imageUrl && <p className="error">{errors.imageUrl}</p>}
+        </div>
 
         {previewUrl && (
           <div className="image-preview">

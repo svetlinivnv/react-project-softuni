@@ -1,7 +1,6 @@
 import "./styles.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-
 import { useAuth } from "../../contexts/AuthContext";
 import dataService from "../../services/dataService";
 import Loader from "../loader/Loader";
@@ -13,7 +12,13 @@ export default function ProductEdit() {
   const userId = user?.uid;
 
   const [product, setProduct] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    imageUrl: "",
+  });
+  const [errors, setErrors] = useState({});
   const [previewUrl, setPreviewUrl] = useState("");
 
   useEffect(() => {
@@ -24,8 +29,14 @@ export default function ProductEdit() {
           productId
         );
         setProduct(productData);
-        setImageUrl(productData.imageUrl);
+        setFormData({
+          name: productData.name,
+          description: productData.description,
+          price: productData.price,
+          imageUrl: productData.imageUrl,
+        });
         setPreviewUrl(productData.imageUrl);
+
         if (userId !== productData.createdBy) {
           navigate(`/catalog/${productId}`);
         }
@@ -34,50 +45,99 @@ export default function ProductEdit() {
       }
     };
     fetchProduct();
-  }, [productId]);
+  }, [productId, userId, navigate]);
 
-  if (!product) {
-    return <Loader />;
-  }
+  if (!product) return <Loader />;
 
-  const submitAction = (formData) => {
-    const updatedProduct = Object.fromEntries(formData);
-    updatedProduct.price = Number(updatedProduct.price);
+  const validateForm = (data) => {
+    const newErrors = {};
+
+    if (!data.name || data.name.trim().length < 3) {
+      newErrors.name = "Product name must be at least 3 characters long.";
+    }
+
+    if (!data.description || data.description.trim().length < 10) {
+      newErrors.description =
+        "Description must be at least 10 characters long.";
+    }
+
+    if (!data.price || isNaN(data.price) || Number(data.price) <= 0) {
+      newErrors.price = "Price must be a positive number.";
+    }
+
+    if (!data.imageUrl || !isValidUrl(data.imageUrl)) {
+      newErrors.imageUrl = "Image URL must be a valid URL.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const submitAction = async (event) => {
+    event.preventDefault();
+
+    if (!validateForm(formData)) return;
+
+    const updatedProduct = {
+      ...formData,
+      price: Number(formData.price),
+    };
 
     try {
-      dataService.updateDocument("products", productId, updatedProduct);
+      await dataService.updateDocument("products", productId, updatedProduct);
       navigate(`/catalog/${productId}`);
     } catch (err) {
       alert("Error updating product: ", err);
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    if (name === "imageUrl") setPreviewUrl(value);
+  };
+
   const handleUrlBlur = () => {
-    setPreviewUrl(imageUrl);
+    if (!isValidUrl(formData.imageUrl)) setPreviewUrl("");
   };
 
   return (
     <div className="edit-product-container">
       <h2>Edit Product</h2>
-      <form action={submitAction}>
+      <form onSubmit={submitAction}>
         <div className="form-group">
           <label>Product Name:</label>
           <input
             type="text"
             name="name"
-            defaultValue={product.name}
-            required
+            value={formData.name}
+            onChange={handleChange}
           />
+          {errors.name && <p className="error">{errors.name}</p>}
         </div>
 
         <div className="form-group">
           <label>Description:</label>
           <textarea
             name="description"
-            defaultValue={product.description}
             rows="4"
-            required
+            value={formData.description}
+            onChange={handleChange}
           ></textarea>
+          {errors.description && <p className="error">{errors.description}</p>}
         </div>
 
         <div className="form-group">
@@ -85,10 +145,11 @@ export default function ProductEdit() {
           <input
             type="number"
             name="price"
-            defaultValue={product.price}
+            value={formData.price}
+            onChange={handleChange}
             step="0.01"
-            required
           />
+          {errors.price && <p className="error">{errors.price}</p>}
         </div>
 
         <div className="form-group">
@@ -96,11 +157,11 @@ export default function ProductEdit() {
           <input
             type="url"
             name="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
+            value={formData.imageUrl}
+            onChange={handleChange}
             onBlur={handleUrlBlur}
-            required
           />
+          {errors.imageUrl && <p className="error">{errors.imageUrl}</p>}
         </div>
 
         {previewUrl && (

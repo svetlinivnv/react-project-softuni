@@ -46,7 +46,12 @@ export default function ShoppingCart() {
           <div className="cart-total">
             <span id="total-price">Total: {totalSum.toFixed(2)} lv.</span>
           </div>
-          <button className="checkout-btn">Checkout</button>
+          <button
+            disabled
+            className="checkout-btn"
+          >
+            Checkout (Coming Soon!)
+          </button>
         </>
       ) : (
         <>
