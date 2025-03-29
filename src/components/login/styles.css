@@ -4,23 +4,37 @@
     padding: 20px;
     border: 1px solid #ddd;
     text-align: center;
+    border-radius: 10px;
+    background-color: #f9f9f9;
 }
+
 input {
     width: 100%;
     padding: 8px;
     margin: 5px 0;
     border: 1px solid #ccc;
+    border-radius: 5px;
 }
+
 button {
     width: 100%;
     padding: 10px;
     background: #007bff;
     color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
+    margin-top: 10px;
 }
+
 button:hover {
     background: #0056b3;
+}
+
+.error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
 }
 
 #user {

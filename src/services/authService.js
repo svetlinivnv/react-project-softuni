@@ -4,11 +4,21 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
+  reload,
 } from "firebase/auth";
 
-const registerUser = (email, password) => {
-  return createUserWithEmailAndPassword(auth, email, password);
-};
+
+const registerUser = async (email, password, username) => {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  const user = userCredential.user;
+
+  await updateProfile(user, { 
+    displayName: username
+  });
+
+  return userCredential;
+}
 
 const loginUser = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);

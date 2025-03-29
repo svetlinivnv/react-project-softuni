@@ -2,16 +2,6 @@ import { db } from "../firebaseConfig";
 import { collection, getDocs, getDoc, updateDoc, deleteDoc, doc, query, orderBy, setDoc } from "firebase/firestore";
 
 const dataService = {
-  // async createDocument(collectionName, productData) {
-  //   try {
-  //     const docRef = doc(db, collectionName, productData.productId);
-  //     await setDoc(docRef, productData);
-  //     return productData.productId;
-  //   } catch (error) {
-  //     alert("Error adding document:", error);
-  //     throw error;
-  //   }
-  // },
 
   async createDocument(collectionName, docId, data) {
     try {

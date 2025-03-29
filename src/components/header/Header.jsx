@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import { useAuth } from "../../contexts/AuthContext";
-import Loader from "../loader/Loader";
 
 export default function Header() {
   const { user, loading } = useAuth();
@@ -37,7 +36,7 @@ export default function Header() {
               </li>
               <li>
                 <Link to="/logout">Logout</Link>
-                {` (${user.displayName})`}
+                {user?.displayName && ` (${user.displayName})`}
               </li>
               <li>
                 <Link
