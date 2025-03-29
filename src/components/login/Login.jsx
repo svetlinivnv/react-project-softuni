@@ -12,10 +12,28 @@ export default function Login() {
     password: "",
   });
 
-  const validateForm = (loginData) => {
+  const validateField = (name, value) => {
+    let error = "";
+
+    if (name === "username" && !value.trim()) {
+      error = "Username is required!";
+    }
+
+    if (name === "password" && !value.trim()) {
+      error = "Password is required!";
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+  };
+
+  const validateForm = () => {
     const newErrors = {};
-    if (!loginData.username) newErrors.username = "Username is required!";
-    if (!loginData.password) newErrors.password = "Password is required!";
+    if (!formData.username) newErrors.username = "Username is required!";
+    if (!formData.password) newErrors.password = "Password is required!";
+
     setErrors(newErrors);
     setGlobalError("");
     return Object.keys(newErrors).length === 0;
@@ -23,28 +41,34 @@ export default function Login() {
 
   const submitAction = async (event) => {
     event.preventDefault();
-    const loginData = { ...formData };
-    if (!validateForm(loginData)) return;
+    if (!validateForm()) return;
 
     try {
       setGlobalError("");
-      await authService.loginUser(loginData.username, loginData.password);
+      await authService.loginUser(formData.username, formData.password);
       navigate("/catalog");
     } catch (err) {
-      setGlobalError(`Invalid username or password!`);
+      setGlobalError("Invalid username or password!");
     }
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Clear error as user is typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
   };
 
   const handleBlur = (e) => {
-    const loginData = { ...formData, [e.target.name]: e.target.value };
-    validateForm(loginData);
+    const { name, value } = e.target;
+    validateField(name, value);
   };
 
   return (

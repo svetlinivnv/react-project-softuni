@@ -16,18 +16,40 @@ export default function Register() {
     confirmPassword: "",
   });
 
-  const validateForm = (registerData) => {
+  const validateField = (name, value) => {
+    let error = "";
+
+    if (name === "username" && (!value || value.trim().length < 3)) {
+      error = "Username must be at least 3 characters long!";
+    }
+
+    if (name === "email" && (!value || !/^\S+@\S+\.\S+$/.test(value))) {
+      error = "Please enter a valid email address!";
+    }
+
+    if (name === "password" && value.length < 6) {
+      error = "Password must be at least 6 characters long!";
+    }
+
+    if (name === "confirmPassword" && value !== formData.password) {
+      error = "Passwords do not match!";
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+  };
+
+  const validateForm = () => {
     const newErrors = {};
 
-    if (!registerData.username) newErrors.username = "Username is required!";
-    if (!registerData.email) newErrors.email = "Email is required!";
-    if (!registerData.password) newErrors.password = "Password is required!";
-    if (registerData.password && registerData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters long!";
-    }
-    if (!registerData.confirmPassword)
+    if (!formData.username) newErrors.username = "Username is required!";
+    if (!formData.email) newErrors.email = "Email is required!";
+    if (!formData.password) newErrors.password = "Password is required!";
+    if (!formData.confirmPassword)
       newErrors.confirmPassword = "Confirm Password is required!";
-    if (registerData.password !== registerData.confirmPassword)
+    if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match!";
 
     setErrors(newErrors);
@@ -37,16 +59,14 @@ export default function Register() {
 
   const submitAction = async (event) => {
     event.preventDefault();
-    const registerData = { ...formData };
-
-    if (!validateForm(registerData)) return;
+    if (!validateForm()) return;
 
     try {
       setGlobalError("");
       await authService.registerUser(
-        registerData.email,
-        registerData.password,
-        registerData.username
+        formData.email,
+        formData.password,
+        formData.username
       );
       navigate("/");
     } catch (err) {
@@ -55,15 +75,22 @@ export default function Register() {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Clear error as user is typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
   };
 
   const handleBlur = (e) => {
-    const registerData = { ...formData, [e.target.name]: e.target.value };
-    validateForm(registerData);
+    const { name, value } = e.target;
+    validateField(name, value);
   };
 
   return (
