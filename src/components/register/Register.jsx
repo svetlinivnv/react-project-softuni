@@ -61,6 +61,11 @@ export default function Register() {
     });
   };
 
+  const handleBlur = (e) => {
+    const registerData = { ...formData, [e.target.name]: e.target.value };
+    validateForm(registerData);
+  };
+
   return (
     <div className="register-container">
       <h2>Register</h2>
@@ -72,6 +77,7 @@ export default function Register() {
             name="username"
             value={formData.username}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           {errors.username && <p className="error">{errors.username}</p>}
         </div>
@@ -83,6 +89,7 @@ export default function Register() {
             name="email"
             value={formData.email}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           {errors.email && <p className="error">{errors.email}</p>}
         </div>
@@ -94,6 +101,7 @@ export default function Register() {
             name="password"
             value={formData.password}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           {errors.password && <p className="error">{errors.password}</p>}
         </div>
@@ -105,6 +113,7 @@ export default function Register() {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           {errors.confirmPassword && (
             <p className="error">{errors.confirmPassword}</p>

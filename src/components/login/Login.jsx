@@ -42,6 +42,11 @@ export default function Login() {
     });
   };
 
+  const handleBlur = (e) => {
+    const loginData = { ...formData, [e.target.name]: e.target.value };
+    validateForm(loginData);
+  };
+
   return (
     <div className="login-container">
       <h2>Login</h2>
@@ -53,6 +58,7 @@ export default function Login() {
             name="username"
             value={formData.username}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           {errors.username && <p className="error">{errors.username}</p>}
         </div>
@@ -63,6 +69,7 @@ export default function Login() {
             name="password"
             value={formData.password}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           {errors.password && <p className="error">{errors.password}</p>}
         </div>

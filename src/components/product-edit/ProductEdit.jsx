@@ -49,28 +49,29 @@ export default function ProductEdit() {
 
   if (!product) return <Loader />;
 
-  const validateForm = (data) => {
-    const newErrors = {};
+  const validateField = (name, value) => {
+    let error = "";
 
-    if (!data.name || data.name.trim().length < 3) {
-      newErrors.name = "Product name must be at least 3 characters long.";
+    if (name === "name" && (!value || value.trim().length < 3)) {
+      error = "Product name must be at least 3 characters long.";
     }
 
-    if (!data.description || data.description.trim().length < 10) {
-      newErrors.description =
-        "Description must be at least 10 characters long.";
+    if (name === "description" && (!value || value.trim().length < 10)) {
+      error = "Description must be at least 10 characters long.";
     }
 
-    if (!data.price || isNaN(data.price) || Number(data.price) <= 0) {
-      newErrors.price = "Price must be a positive number.";
+    if (name === "price" && (!value || isNaN(value) || Number(value) <= 0)) {
+      error = "Price must be a positive number.";
     }
 
-    if (!data.imageUrl || !isValidUrl(data.imageUrl)) {
-      newErrors.imageUrl = "Image URL must be a valid URL.";
+    if (name === "imageUrl" && (!value || !isValidUrl(value))) {
+      error = "Image URL must be a valid URL.";
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
   };
 
   const isValidUrl = (url) => {
@@ -85,7 +86,8 @@ export default function ProductEdit() {
   const submitAction = async (event) => {
     event.preventDefault();
 
-    if (!validateForm(formData)) return;
+    const isValid = Object.keys(formData).every((field) => !errors[field]);
+    if (!isValid) return;
 
     const updatedProduct = {
       ...formData,
@@ -110,8 +112,13 @@ export default function ProductEdit() {
     if (name === "imageUrl") setPreviewUrl(value);
   };
 
-  const handleUrlBlur = () => {
-    if (!isValidUrl(formData.imageUrl)) setPreviewUrl("");
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    validateField(name, value);
+
+    if (name === "imageUrl" && !isValidUrl(value)) {
+      setPreviewUrl("");
+    }
   };
 
   return (
@@ -125,6 +132,7 @@ export default function ProductEdit() {
             name="name"
             value={formData.name}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           {errors.name && <p className="error">{errors.name}</p>}
         </div>
@@ -136,6 +144,7 @@ export default function ProductEdit() {
             rows="4"
             value={formData.description}
             onChange={handleChange}
+            onBlur={handleBlur}
           ></textarea>
           {errors.description && <p className="error">{errors.description}</p>}
         </div>
@@ -147,6 +156,7 @@ export default function ProductEdit() {
             name="price"
             value={formData.price}
             onChange={handleChange}
+            onBlur={handleBlur}
             step="0.01"
           />
           {errors.price && <p className="error">{errors.price}</p>}
@@ -159,7 +169,7 @@ export default function ProductEdit() {
             name="imageUrl"
             value={formData.imageUrl}
             onChange={handleChange}
-            onBlur={handleUrlBlur}
+            onBlur={handleBlur}
           />
           {errors.imageUrl && <p className="error">{errors.imageUrl}</p>}
         </div>

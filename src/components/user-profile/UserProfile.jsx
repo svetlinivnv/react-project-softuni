@@ -26,11 +26,32 @@ export default function UserProfile() {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const validateField = (name, value) => {
+    let error = "";
+
+    if (name === "username" && (!value || value.trim().length < 3)) {
+      error = "Username must be at least 3 characters long.";
+    }
+
+    if (name === "newPassword" && value && value.length < 6) {
+      error = "Password must be at least 6 characters long.";
+    }
+
+    if (name === "confirmPassword" && value !== formData.newPassword) {
+      error = "Passwords do not match.";
+    }
 
     setFormErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: "",
+      [name]: error,
     }));
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    validateField(name, value);
   };
 
   const validateForm = () => {
@@ -86,6 +107,7 @@ export default function UserProfile() {
           name="username"
           value={formData.username}
           onChange={handleChange}
+          onBlur={handleBlur}
           required
           className={formErrors.username ? "invalid" : ""}
         />
@@ -108,6 +130,7 @@ export default function UserProfile() {
           name="newPassword"
           value={formData.newPassword}
           onChange={handleChange}
+          onBlur={handleBlur}
           className={formErrors.newPassword ? "invalid" : ""}
         />
         {formErrors.newPassword && (
@@ -120,6 +143,7 @@ export default function UserProfile() {
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
+          onBlur={handleBlur}
           className={formErrors.confirmPassword ? "invalid" : ""}
         />
         {formErrors.confirmPassword && (

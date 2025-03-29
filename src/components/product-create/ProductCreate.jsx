@@ -45,6 +45,31 @@ export default function AddProduct() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateField = (name, value) => {
+    let error = "";
+
+    if (name === "name" && (!value || value.trim().length < 3)) {
+      error = "Product name must be at least 3 characters long.";
+    }
+
+    if (name === "description" && (!value || value.trim().length < 10)) {
+      error = "Description must be at least 10 characters long.";
+    }
+
+    if (name === "price" && (!value || isNaN(value) || Number(value) <= 0)) {
+      error = "Price must be a positive number.";
+    }
+
+    if (name === "imageUrl" && (!value || !isValidUrl(value))) {
+      error = "Image URL must be a valid URL.";
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+  };
+
   const isValidUrl = (url) => {
     try {
       new URL(url);
@@ -88,8 +113,13 @@ export default function AddProduct() {
     if (name === "imageUrl") setPreviewUrl(value);
   };
 
-  const handleUrlBlur = () => {
-    if (!isValidUrl(formData.imageUrl)) setPreviewUrl("");
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    validateField(name, value);
+
+    if (name === "imageUrl" && !isValidUrl(value)) {
+      setPreviewUrl("");
+    }
   };
 
   return (
@@ -103,6 +133,7 @@ export default function AddProduct() {
             name="name"
             value={formData.name}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           {errors.name && <p className="error">{errors.name}</p>}
         </div>
@@ -114,6 +145,7 @@ export default function AddProduct() {
             rows="4"
             value={formData.description}
             onChange={handleChange}
+            onBlur={handleBlur}
           ></textarea>
           {errors.description && <p className="error">{errors.description}</p>}
         </div>
@@ -125,6 +157,7 @@ export default function AddProduct() {
             name="price"
             value={formData.price}
             onChange={handleChange}
+            onBlur={handleBlur}
             step="0.01"
           />
           {errors.price && <p className="error">{errors.price}</p>}
@@ -137,7 +170,7 @@ export default function AddProduct() {
             name="imageUrl"
             value={formData.imageUrl}
             onChange={handleChange}
-            onBlur={handleUrlBlur}
+            onBlur={handleBlur}
           />
           {errors.imageUrl && <p className="error">{errors.imageUrl}</p>}
         </div>
