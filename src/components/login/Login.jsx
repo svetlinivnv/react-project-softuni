@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./styles.css";
 import authService from "../../services/authService";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -101,7 +101,7 @@ export default function Login() {
       </form>
       <div className="register-link">
         <p>
-          Don't have an account? <a href="/register">Register here</a>
+          Don't have an account? <Link to="/register">Register here</Link>
         </p>
       </div>
     </div>

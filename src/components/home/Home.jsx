@@ -3,7 +3,6 @@ import FeaturedProducts from "../features-products/FeaturesProducts";
 import Hero from "../hero/Hero";
 import Loader from "../loader/Loader";
 import PromoBanner from "../promo-banner/PromoBanner";
-import TestimonialCreate from "../testimonial-create/TestimonialCreate";
 import Testimonials from "../testimonials/Testimonials";
 
 export default function Home() {
