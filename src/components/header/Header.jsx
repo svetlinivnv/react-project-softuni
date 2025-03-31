@@ -9,8 +9,6 @@ export default function Header() {
   const navRef = useRef(null);
   const menuBtnRef = useRef(null);
 
-  console.log(profile.displayName);
-
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
   };
