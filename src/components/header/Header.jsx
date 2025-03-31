@@ -4,10 +4,12 @@ import { Link } from "react-router";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function Header() {
-  const { user, loading } = useAuth();
+  const { user, loading, profile } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef(null);
   const menuBtnRef = useRef(null);
+
+  console.log(profile.displayName);
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -82,7 +84,7 @@ export default function Header() {
               </li>
               <li>
                 <Link to="/logout">Logout</Link>
-                {user?.displayName && ` (${user.displayName})`}
+                {user?.displayName && ` (${profile.displayName})`}
               </li>
               <li>
                 <Link

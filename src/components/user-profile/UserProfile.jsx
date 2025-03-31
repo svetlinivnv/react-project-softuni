@@ -4,7 +4,7 @@ import authService from "../../services/authService";
 import "./styles.css";
 
 export default function UserProfile() {
-  const { user } = useAuth();
+  const { user, setProfile } = useAuth();
   const [formData, setFormData] = useState({
     username: user?.displayName || "",
     email: user?.email || "",
@@ -114,6 +114,7 @@ export default function UserProfile() {
     try {
       await authService.updateUserProfile(user, formData);
       setSuccess("Profile updated successfully!");
+      setProfile({ displayName: user.displayName });
     } catch (err) {
       setError("Failed to update profile. " + err.message);
     }
