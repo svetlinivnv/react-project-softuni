@@ -1,0 +1,75 @@
+.payment-details {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    max-width: 80%;
+    margin: 2rem auto;
+  }
+  
+  .payment-details h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .input-group {
+    margin-bottom: 1rem;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .input-group input,
+  .input-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .confirm-btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #3B82F6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .confirm-btn:hover {
+    background-color: #2563EB;
+  }
+
+.order-confirmed {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #6EE7B7 0%, #3B82F6 100%);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+    transition: transform 0.2s;
+    }
+    
+    .order-confirmed:hover {
+    transform: scale(1.05);
+    }
+    
+    @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .error-message {
+        text-align: center;
+    }

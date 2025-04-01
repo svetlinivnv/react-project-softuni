@@ -90,12 +90,23 @@ export function CartProvider({ children }) {
     }
   };
 
+  const cartCheckout = async () => {
+    try {
+      await dataService.deleteDocument("carts", userId);
+      setCart([]);
+    } catch (err) {
+      alert("Error on checkout: " + err.message);
+    }
+  };
+
   useEffect(() => {
     fetchCart();
   }, [userId]);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, cartCheckout }}
+    >
       {children}
     </CartContext.Provider>
   );

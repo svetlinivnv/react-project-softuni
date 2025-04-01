@@ -56,7 +56,7 @@
   }
   
   .checkout-btn {
-    background-color: #cccccc !important;
+    background-color: #007bff !important;
     color: #fff;
     border: none;
     padding: 15px 30px;
@@ -66,21 +66,21 @@
     margin-top: 20px;
   }
 
-  .checkout-btn-back {
+  .checkout-btn {
     background-color: #007bff;
     color: #fff;
     border: none;
     padding: 15px 30px;
     border-radius: 5px;
-    cursor: default !important;
+    cursor: pointer !important;
     transition: background-color 0.3s;
     margin-top: 20px;
   } 
 
 
   
-  .checkout-btn-back :hover {
-    background-color: #0056b3;
+  .checkout-btn:hover {
+    background-color: #0056b3 !important;
   }
   
   .delete {
