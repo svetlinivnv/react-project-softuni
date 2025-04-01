@@ -3,9 +3,10 @@ import { Link } from "react-router";
 import { useCart } from "../../contexts/CartContext";
 import OrderDetails from "../order-details/OrderDetails";
 import { useState } from "react";
+import Loader from "../loader/Loader";
 
 export default function ShoppingCart() {
-  const { cart, removeFromCart } = useCart();
+  const { cart, loading, removeFromCart } = useCart();
   const [checkout, setCheckout] = useState(false);
 
   const handleCheckout = () => {
@@ -16,6 +17,10 @@ export default function ShoppingCart() {
     (sum, product) => sum + (product.price * product.quantity || 0),
     0
   );
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <section className="cart-container">

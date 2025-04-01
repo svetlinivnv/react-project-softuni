@@ -6,6 +6,7 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
   const user = useAuth();
   const userId = user?.user?.uid;
 
@@ -18,6 +19,7 @@ export function CartProvider({ children }) {
     try {
       const cartData = await dataService.getDocumentById("carts", userId);
       setCart(cartData?.products || []);
+      setLoading(false);
     } catch (error) {
       alert("Error fetching cart: " + error.message);
     }
@@ -105,7 +107,7 @@ export function CartProvider({ children }) {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, cartCheckout }}
+      value={{ cart, loading, addToCart, removeFromCart, cartCheckout }}
     >
       {children}
     </CartContext.Provider>
