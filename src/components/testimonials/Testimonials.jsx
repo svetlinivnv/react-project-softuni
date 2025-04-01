@@ -6,10 +6,12 @@ import TestimonialCreate from "../testimonial-create/TestimonialCreate";
 
 export default function Testimonials() {
   const [testimonials, setTestimonials] = useState([]);
+  const testimonialsLimit = 8;
 
   const fetchTestimonials = async () => {
-    const data = await dataService.getAllDocuments("testimonials");
-    setTestimonials(data);
+    const data = await dataService.getDocumentsWithPagination("testimonials");
+    const transformedTestimonials = Object.entries(data)[0][1];
+    setTestimonials(transformedTestimonials);
   };
 
   useEffect(() => {
@@ -25,7 +27,7 @@ export default function Testimonials() {
             No testimonials available. Be the first to share your experience!
           </p>
         ) : (
-          testimonials.slice(0, 10).map((testimonial) => (
+          testimonials.slice(0, testimonialsLimit).map((testimonial) => (
             <div
               className="testimonial-card"
               key={testimonial.id}

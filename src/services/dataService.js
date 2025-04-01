@@ -1,11 +1,10 @@
 import { db } from "../firebaseConfig";
-import { collection, getDocs, getDoc, updateDoc, deleteDoc, doc, query, orderBy, setDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, updateDoc, deleteDoc, doc, query, orderBy, limit, startAfter, setDoc } from "firebase/firestore";
 
 const dataService = {
-
   async createDocument(collectionName, docId, data) {
     try {
-      const docRef = doc(db, collectionName, docId);  
+      const docRef = doc(db, collectionName, docId);
       await setDoc(docRef, data);
       return docId;
     } catch (error) {
@@ -14,11 +13,23 @@ const dataService = {
     }
   },
 
-  async getAllDocuments(collectionName) {
+  async getDocumentsWithPagination(collectionName, lastDoc = null) {
     try {
-      const q = query(collection(db, collectionName), orderBy("createdAt", "desc"));
+      let q = query(
+        collection(db, collectionName),
+        orderBy("createdAt", "desc"),
+        limit(10)
+      );
+
+      if (lastDoc) {
+        q = query(q, startAfter(lastDoc));
+      }
+
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      const documents = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      return { documents, lastVisible };
     } catch (error) {
       alert("Error fetching documents:", error);
       throw error;

@@ -20,8 +20,9 @@ export default function FeaturedProducts() {
 
   useEffect(() => {
     try {
-      dataService.getAllDocuments("products").then((products) => {
-        setProducts(products);
+      dataService.getDocumentsWithPagination("products").then((products) => {
+        const transformedProducts = Object.values(products)[0];
+        setProducts(transformedProducts);
       });
     } catch (err) {
       alert("Error fetching products: ", err);

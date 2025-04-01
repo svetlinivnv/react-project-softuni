@@ -12,11 +12,14 @@ import DeleteConfirmation from "../delete-confirmation/DeleteConfirmation";
 export default function Catalog() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState([]);
   const [productToDelete, setProductToDelete] = useState(null);
   const { addToCart } = useCart();
   const { user } = useAuth();
   const [userId, setUserId] = useState(null);
+  const [lastVisible, setLastVisible] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -42,13 +45,31 @@ export default function Catalog() {
     }
   };
 
+  const loadProducts = async (loadMore = false) => {
+    if (loadMore) setLoadingMore(true);
+    else setLoading(true);
+
+    const response = await dataService.getDocumentsWithPagination(
+      "products",
+      loadMore ? lastVisible : null
+    );
+
+    if (response.documents.length > 0) {
+      setProducts((prevProducts) =>
+        loadMore ? [...prevProducts, ...response.documents] : response.documents
+      );
+      setLastVisible(response.lastVisible);
+    }
+
+    if (loadMore) setLoadingMore(false);
+    else setLoading(false);
+  };
+
   useEffect(() => {
-    dataService.getAllDocuments("products").then((products) => {
-      setProducts(products);
-    });
+    loadProducts();
   }, []);
 
-  if (!products) {
+  if (loading && !products.length) {
     return <Loader />;
   }
 
@@ -110,6 +131,16 @@ export default function Catalog() {
           ))
         )}
       </div>
+
+      {lastVisible && (
+        <button
+          onClick={() => loadProducts(true)}
+          disabled={loadingMore}
+          className="load-more-btn"
+        >
+          {loadingMore ? "Loading more..." : "Load More"}
+        </button>
+      )}
     </div>
   );
 }

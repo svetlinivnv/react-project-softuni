@@ -78,3 +78,9 @@
 .delete-icon:hover {
   color: red;
 }
+
+.load-more-btn {
+  width: 30%;
+  margin: auto;
+  margin-top: 50px;
+}
