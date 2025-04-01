@@ -27,7 +27,7 @@ export default function OrderDetails({ handlePayment }) {
         <p className="order-confirmed">Thank you for your order!</p>
       ) : (
         <div className="payment-details">
-          <h2>Payment details:</h2>
+          <h2>Payment Details:</h2>
           <input
             type="text"
             placeholder="Name"

@@ -18,6 +18,7 @@ body {
 .main-content {
   padding-bottom: 60px;
   padding-top: 40px;
+  min-height: 100vh;
 }
 .logo {
   margin: 0;
