@@ -98,7 +98,7 @@ export default function Header() {
                     className="fas fa-shopping-cart"
                     style={{ opacity: 0.5 }}
                   ></i>
-                  Cart
+                  {" Cart"}
                 </Link>
               </li>
             </div>
