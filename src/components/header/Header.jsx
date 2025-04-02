@@ -100,12 +100,6 @@ export default function Header() {
                   ></i>
                   Cart
                 </Link>
-                {/* <Link
-                  to="/cart"
-                  className="cart"
-                >
-                  🛒 Cart
-                </Link> */}
               </li>
             </div>
           ) : (
