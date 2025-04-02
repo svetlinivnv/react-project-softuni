@@ -2,12 +2,16 @@ import "./styles.css";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../contexts/AuthContext";
+import { useCart } from "../../contexts/CartContext";
 
 export default function Header() {
   const { user, loading, profile } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { cart, loading: cartLoading } = useCart();
   const navRef = useRef(null);
   const menuBtnRef = useRef(null);
+
+  console.log(cartLoading);
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -84,7 +88,10 @@ export default function Header() {
                 <Link to="/logout">Logout</Link>
                 {user?.displayName && ` (${profile.displayName})`}
               </li>
-              <li>
+              <li style={{ position: "relative" }}>
+                {cart.length > 0 && (
+                  <span className="cart-count">{cart.length}</span>
+                )}
                 <Link
                   to="/cart"
                   className="cart"
