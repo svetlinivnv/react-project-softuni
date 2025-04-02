@@ -7,11 +7,9 @@ import { useCart } from "../../contexts/CartContext";
 export default function Header() {
   const { user, loading, profile } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { cart, loading: cartLoading } = useCart();
+  const { cart } = useCart();
   const navRef = useRef(null);
   const menuBtnRef = useRef(null);
-
-  console.log(cartLoading);
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
