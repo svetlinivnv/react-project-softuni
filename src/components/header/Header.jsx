@@ -94,8 +94,18 @@ export default function Header() {
                   to="/cart"
                   className="cart"
                 >
-                  🛒 Cart
+                  <i
+                    className="fas fa-shopping-cart"
+                    style={{ opacity: 0.5 }}
+                  ></i>
+                  Cart
                 </Link>
+                {/* <Link
+                  to="/cart"
+                  className="cart"
+                >
+                  🛒 Cart
+                </Link> */}
               </li>
             </div>
           ) : (
